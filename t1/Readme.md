@@ -10,6 +10,28 @@ Valores iniciais de b, w, valores de alpha e num_iterations que resultem na melh
 
 ###  Erro quadrático médio obtido na sua implementação da regressão linear.
 
+Valores iniciais: 
+    b = 1
+    w = 0,75
+    alpha = 0,01 
+    num_iterations = 1500
+    
+![Plot dados](./plotDado.png)
+
+Erro quadrático final: 
+    8.527783901973569
+
+![EQM](./eqm.png)
+
+Curva encontrada: 
+    1.1585957365061903*x + -3.429571179361111
+
+![Curva final](./curvaFinal.png)
+
+
+Inicialmente, alterar o valor de alpha de 1 para 0,01 melhorou dramaticamente o erro quadrático. Alterando o valor de alpha para 0,001 o erro quadrático voltou a piorar.
+Testando iterativamente os valores de b e w, se alcançou uma curva suave com b = 1, w = 0,75 com o número de iterações fixado em 1500. Valores de iterações maiores resultaram em curvas cada vez piores.
+
 
 # Parte 2
 ### Análise dos datasets 
