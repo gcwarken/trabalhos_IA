@@ -16,7 +16,7 @@ Valores iniciais:
     alpha = 0,01 
     num_iterations = 1500
     
-![Plot dados](./plotDado.png)
+![Plot dados](./plotDados.png)
 
 Erro quadrático final: 
     8.527783901973569
