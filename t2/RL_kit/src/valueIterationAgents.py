@@ -43,22 +43,22 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.values = util.Counter()  # A Counter is a dict with default 0
 
         # Write value iteration code here
-         for i in range(self.iterations):
-            newValues = util.Counter()  # novo vetor de valores V_k
+        for i in range(self.iterations):
+                newValues = util.Counter()  # novo vetor de valores V_k
 
-            for state in mdp.getStates():
-                if mdp.isTerminal(state):
-                    continue
+                for state in mdp.getStates():
+                    if mdp.isTerminal(state):
+                        continue
 
-                # Calcula o maior valor Q para todas as ações possíveis
-                maxQ = float('-inf')
-                for action in mdp.getPossibleActions(state):
-                    qValue = self.computeQValueFromValues(state, action)
-                    maxQ = max(maxQ, qValue)
+                    # Calcula o maior valor Q para todas as ações possíveis
+                    maxQ = float('-inf')
+                    for action in mdp.getPossibleActions(state):
+                        qValue = self.computeQValueFromValues(state, action)
+                        maxQ = max(maxQ, qValue)
 
-                newValues[state] = maxQ
+                    newValues[state] = maxQ
 
-            self.values = newValues  # substitui V_k-1 por V_k
+                self.values = newValues  # substitui V_k-1 por V_k
 
     def getValue(self, state):
         """
@@ -71,7 +71,7 @@ class ValueIterationAgent(ValueEstimationAgent):
           Compute the Q-value of action in state from the
           value function stored in self.values.
         """      
-        "*** CODE Below ***"
+ 
      
         qValue = 0
         for nextState, prob in self.mdp.getTransitionStatesAndProbs(state, action):
