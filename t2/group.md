@@ -1,0 +1,3 @@
+- Gabriel Costa Warken   cartão 179787, turma A (manhã)
+- Joana Oliveira DAvila  cartão 274739, turma A (manhã)
+- Diogo Brum Rivoire     cartão 344735, turma B (tarde)
