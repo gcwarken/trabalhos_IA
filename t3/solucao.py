@@ -91,8 +91,7 @@ def expande(nodo:Nodo)->Set[Nodo]:
     sucessores = sucessor(nodo.estado)
 
     for suces in sucessores:
-        # acao, estado, pai, custo
-        filhos.add(Nodo(suces[0], suces[1], nodo, nodo.custo + 1))
+        filhos.add(Nodo(suces[1], nodo, suces[0], nodo.custo + 1))
     return filhos
 
 
