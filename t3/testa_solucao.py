@@ -90,5 +90,41 @@ class TestaSolucao(unittest.TestCase):
         for alg in [solucao.astar_hamming, solucao.astar_manhattan]:
             self.assertEqual(solucao_otima, self.run_algorithm(alg, estado))
 
+    def test_relatorio(self):
+        """
+        Gera dados de desempenho do A* (Hamming e Manhattan) no estado 2_3541687,
+        mostrando: tempo, custo e número de nós expandidos.
+        """
+
+        def executar_algoritmo(nome, algoritmo):
+            import time
+            global nos_expandidos
+            nos_expandidos = 0
+
+            # Substitui a função 'expande' por uma que conta nós
+            original_expande = solucao.expande
+            def expande_contando(nodo):
+                global nos_expandidos
+                nos_expandidos += 1
+                return original_expande(nodo)
+
+            solucao.expande = expande_contando
+
+            inicio = time.time()
+            resultado = self.run_algorithm(algoritmo, "2_3541687")
+            fim = time.time()
+
+            # Restaura função original
+            solucao.expande = original_expande
+
+            print(f"\n[{nome}]")
+            print(f"Tempo decorrido: {fim - inicio:.6f} segundos")
+            print(f"Nós expandidos: {nos_expandidos}")
+            print(f"Custo da solução: {len(resultado)}")
+            print(f"Ações: {resultado}")
+
+        executar_algoritmo("A* com Hamming", solucao.astar_hamming)
+        executar_algoritmo("A* com Manhattan", solucao.astar_manhattan)
+
 if __name__ == '__main__':
     unittest.main()

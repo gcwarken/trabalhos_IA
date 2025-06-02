@@ -1,3 +1,4 @@
+import heapq
 from typing import Iterable, Set, Tuple
 
 class Nodo:
@@ -95,7 +96,7 @@ def expande(nodo:Nodo)->Set[Nodo]:
     return filhos
 
 
-def astar_hamming(estado:str)->list[str]:
+def astar_hamming(estado:str)->list[str] | None:
     """
     Recebe um estado (string), executa a busca A* com h(n) = soma das distâncias de Hamming e
     retorna uma lista de ações que leva do
@@ -104,11 +105,11 @@ def astar_hamming(estado:str)->list[str]:
     :param estado: str
     :return:
     """
-    # substituir a linha abaixo pelo seu codigo
-    raise NotImplementedError
-
-
-def astar_manhattan(estado:str)->list[str]:
+    def heuristica_hamming(s: str) -> int:
+        return sum(1 for i, c in enumerate(s) if c != '_' and c != "12345678_"[i])
+    return astar(estado, heuristica_hamming)
+    
+def astar_manhattan(estado:str)->list[str] | None:
     """
     Recebe um estado (string), executa a busca A* com h(n) = soma das distâncias de Manhattan e
     retorna uma lista de ações que leva do
@@ -117,8 +118,44 @@ def astar_manhattan(estado:str)->list[str]:
     :param estado: str
     :return:
     """
-    # substituir a linha abaixo pelo seu codigo
-    raise NotImplementedError
+    def heuristica_manhattan(s: str) -> int:
+        distancia = 0
+        for i, c in enumerate(s):
+            if c != '_':
+                objetivo = "12345678_".index(c)
+                l1, c1 = divmod(i, 3)
+                l2, c2 = divmod(objetivo, 3)
+                distancia += abs(l1 - l2) + abs(c1 - c2)
+        return distancia
+    return astar(estado, heuristica_manhattan)
+
+def astar(estado: str, heuristica) -> list[str] | None:
+    estado_objetivo = "12345678_"
+    nodo_inicial = Nodo(estado, None, None, 0)
+    fronteira = [(heuristica(estado), nodo_inicial)]
+    explorados = set()
+    custo_ate_agora = {estado: 0}
+
+    while fronteira:
+        _, atual = heapq.heappop(fronteira)
+
+        if atual.estado == estado_objetivo:
+            # Reconstrói o caminho de ações internamente
+            caminho = []
+            while atual.pai is not None:
+                caminho.append(atual.acao)
+                atual = atual.pai
+            return caminho[::-1]  # Inverte para obter na ordem correta
+
+        explorados.add(atual.estado)
+
+        for filho in expande(atual):
+            if (filho.estado not in explorados) or (filho.custo < custo_ate_agora.get(filho.estado, float('inf'))):
+                custo_ate_agora[filho.estado] = filho.custo
+                prioridade = filho.custo + heuristica(filho.estado)
+                heapq.heappush(fronteira, (prioridade, filho))
+
+    return None   
 
 #opcional,extra
 def bfs(estado:str)->list[str]:
