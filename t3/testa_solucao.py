@@ -4,7 +4,7 @@ import solucao as solucao
 
 
 class TestaSolucao(unittest.TestCase):
-    
+
     def test_funcao_sucessor(self):
         """
         Testa a funcao sucessor para o estado "2_3541687"
@@ -79,7 +79,7 @@ class TestaSolucao(unittest.TestCase):
 
         # nao ha solucao a partir do estado 185423_67
         self.assertIsNone(self.run_algorithm(solucao.astar_manhattan, "185423_67"))
-    
+
     def test_action_order(self):
         """
         Testa se A* retornam a sequencia de acoes na ordem correta
@@ -106,6 +106,8 @@ class TestaSolucao(unittest.TestCase):
             def expande_contando(nodo):
                 global nos_expandidos
                 nos_expandidos += 1
+                if nos_expandidos > 1900:
+                    print(f"nos_expandidos: {nos_expandidos}")
                 return original_expande(nodo)
 
             solucao.expande = expande_contando
