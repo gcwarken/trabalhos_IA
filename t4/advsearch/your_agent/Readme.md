@@ -3,7 +3,7 @@
 - Joana Oliveira DAvila, cartão 274739, turma A (manhã)
 - Diogo Brum Rivoire, cartão 344735, turma B (tarde)
 
-# Avaliação - Misere
+# Avaliação - Tic-Tac-Toe Misere
 (i) O minimax sempre ganha ou empata jogando contra o randomplayer?
 
 - Sim, após vários testes, com variação de quem começa o minimax sempre ganhou ou empatou com o aleatório, ele nunca perdeu.
@@ -28,10 +28,13 @@ Este heurística define um agente que decide seus movimentos utilizando o algori
 
 Esta heurística define um agente que utiliza o algoritmo minimax com profundidade 5 e poda alfa-beta para escolher movimentos, usando como função de avaliação uma heurística baseada na posição das peças no tabuleiro. A função evaluate_mask calcula o valor do estado atual somando valores posicionais pré-definidos em EVAL_TEMPLATE para as peças de cada jogador, atribuindo mais peso para posições estratégicas (como cantos e bordas), e retorna a diferença desses valores entre os jogadores, ajustada para a perspectiva do jogador atual. Assim, o agente busca maximizar o controle sobre posições vantajosas no tabuleiro, indo além da simples contagem de peças para uma avaliação mais estratégica.
 
-- Heurística Custom:
+- Heurística Customizada:
 
-Este código heurística define um agente que utiliza o algoritmo Minimax com profundidade 5 e uma heurística personalizada para avaliar os estados do jogo. A função evaluate_custom calcula uma pontuação combinando diversos fatores estratégicos: diferença de peças, controle dos cantos e bordas, mobilidade (número de jogadas possíveis), posicionamento com base em uma matriz de pesos (EVAL_TEMPLATE), penalidades por peças em posições perigosas, e estabilidade baseada no domínio dos cantos. A avaliação pondera essas características de forma dinâmica, ajustando sua importância conforme o progresso do jogo (fase inicial ou final). A função make_move usa essa heurística com o minimax para escolher a melhor jogada e inclui um fallback para selecionar um movimento aleatório caso nenhuma jogada seja retornada, evitando inatividade em situações críticas.
+Este heurística define um agente que utiliza o algoritmo Minimax com profundidade 5 e uma heurística personalizada para avaliar os estados do jogo. A função evaluate_custom calcula uma pontuação combinando diversos fatores estratégicos: diferença de peças, controle dos cantos e bordas, mobilidade (número de jogadas possíveis), posicionamento com base em uma matriz de pesos (EVAL_TEMPLATE), penalidades por peças em posições perigosas, e estabilidade baseada no domínio dos cantos. A avaliação pondera essas características de forma dinâmica, ajustando sua importância conforme o progresso do jogo (fase inicial ou final). A função make_move usa essa heurística com o minimax para escolher a melhor jogada e inclui um fallback para selecionar um movimento aleatório caso nenhuma jogada seja retornada, evitando inatividade em situações críticas.
 
+- Critérios de Parada: 
+
+Todas as 3 Heurísticas tem como critério de parada quando o estado atual do jogo é terminal, indicando que a partida acabou, ou quando a profundidade máxima definida para a busca é atingida.
 
 Partidas:
 - Contagem de peças X Valor posicional: 37x27
