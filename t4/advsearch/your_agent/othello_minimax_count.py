@@ -19,26 +19,23 @@ def make_move(state) -> Tuple[int, int]:
     """
 
     # o codigo abaixo apenas retorna um movimento aleatorio valido para
-    # a primeira jogada
+    # a primeira jogada 
     # Remova-o e coloque uma chamada para o minimax_move (que vc implementara' no modulo minimax).
     # A chamada a minimax_move deve receber sua funcao evaluate como parametro.
 
-    return random.choice([(2, 3), (4, 5), (5, 4), (3, 2)])
+    return minimax_move(state, 5, evaluate_count)
 
 
 def evaluate_count(state, player:str) -> float:
     """
-    Evaluates an othello state from the point of view of the given player.
-    If the state is terminal, returns its utility.
+    Evaluates an othello state from the point of view of the given player. 
+    If the state is terminal, returns its utility. 
     If non-terminal, returns an estimate of its value based on the number of pieces of each color.
     :param state: state to evaluate (instance of GameState)
     :param player: player to evaluate the state for (B or W)
     """
-    pretas = state.board.num_pieces("B")
-    brancas = state.board.num_pieces("W")
-    diferenca = pretas - brancas
-
-    if player == "B":
-       return diferenca
-    else:
-       return -diferenca
+    b_pieces = state.board.num_pieces("B")
+    w_pieces = state.board.num_pieces("W")
+    difference = b_pieces - w_pieces
+    
+    return difference if player == "B" else -difference
