@@ -9,6 +9,16 @@ from .minimax import minimax_move
 #
 # Nao esqueca de renomear 'your_agent' com o nome
 # do seu agente.
+EVAL_TEMPLATE = [
+    [100, -30, 6, 2, 2, 6, -30, 100],
+    [-30, -50, 1, 1, 1, 1, -50, -30],
+    [  6,   1, 1, 1, 1, 1,   1,   6],
+    [  2,   1, 1, 3, 3, 1,   1,   2],
+    [  2,   1, 1, 3, 3, 1,   1,   2],
+    [  6,   1, 1, 1, 1, 1,   1,   6],
+    [-30, -50, 1, 1, 1, 1, -50, -30],
+    [100, -30, 6, 2, 2, 6, -30, 100]
+]
 
 
 def make_move(state) -> Tuple[int, int]:
@@ -23,7 +33,7 @@ def make_move(state) -> Tuple[int, int]:
     # Remova-o e coloque uma chamada para o minimax_move (que vc implementara' no modulo minimax).
     # A chamada a minimax_move deve receber sua funcao evaluate como parametro.
 
-    return random.choice([(2, 3), (4, 5), (5, 4), (3, 2)])
+    return minimax_move(state, 5, evaluate_custom)
 
 
 def evaluate_custom(state, player:str) -> float:
