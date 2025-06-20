@@ -21,6 +21,7 @@ EVAL_TEMPLATE = [
 ]
 
 
+
 def make_move(state) -> Tuple[int, int]:
     """
     Returns a move for the given game state
@@ -29,80 +30,102 @@ def make_move(state) -> Tuple[int, int]:
     """
 
     # o codigo abaixo apenas retorna um movimento aleatorio valido para
-    # a primeira jogada
+    # a primeira jogada 
     # Remova-o e coloque uma chamada para o minimax_move (que vc implementara' no modulo minimax).
     # A chamada a minimax_move deve receber sua funcao evaluate como parametro.
 
-    return minimax_move(state, 5, evaluate_custom)
+    move = minimax_move(state, 5, evaluate_custom)
+    
+    if move is None:
+        legal = state.legal_moves()
+        if legal:
+            return random.choice(list(legal))
+        else:
+            return None
+
+    return move
 
 
 def evaluate_custom(state, player:str) -> float:
     """
-    Evaluates an othello state from the point of view of the given player.
-    If the state is terminal, returns its utility.
+    Evaluates an othello state from the point of view of the given player. 
+    If the state is terminal, returns its utility. 
     If non-terminal, returns an estimate of its value based on your custom heuristic
     :param state: state to evaluate (instance of GameState)
     :param player: player to evaluate the state for (B or W)
     """
-    adversary = Board.opponent(player)
+    opponent = Board.opponent(player)
 
     if state.is_terminal():
-        winning_player = state.winner()
-        if winning_player == player:
+        winner = state.winner()
+        if winner == player:
             return float("inf")
-        elif winning_player == adversary:
+        elif winner == opponent:
             return float("-inf")
         else:
-            return 0
+            return 0.0
 
-    current_board = state.get_board()
-    player_count = current_board.num_pieces(player)
-    adversary_count = current_board.num_pieces(adversary)
-    piece_diff = player_count - adversary_count
-    corner_coords = [(0, 0), (0, 7), (7, 0), (7, 7)]
-    player_corner_count = sum(1 for cx, cy in corner_coords if current_board.tiles[cy][cx] == player)
-    adversary_corner_count = sum(1 for cx, cy in corner_coords if current_board.tiles[cy][cx] == adversary)
-    corner_diff = player_corner_count - adversary_corner_count
-    edge_coords = [(x, y) for x in range(8) for y in range(8) if x in [0, 7] or y in [0, 7]]
-    player_edge_count = sum(1 for ex, ey in edge_coords if current_board.tiles[ey][ex] == player)
-    adversary_edge_count = sum(1 for ex, ey in edge_coords if current_board.tiles[ey][ex] == adversary)  
-    edge_diff = player_edge_count - adversary_edge_count
-    player_move_options = len(state.legal_moves())
-    adversary_move_options = len(GameState(current_board, adversary).legal_moves())   
-    mobility_diff = player_move_options - adversary_move_options
+    board = state.get_board()
+    player_pieces = board.num_pieces(player)
+    opponent_pieces = board.num_pieces(opponent)
+    total_pieces = player_pieces + opponent_pieces
+    phase = total_pieces / 64.0
 
-    player_position_value = sum(
-        EVAL_TEMPLATE[x][y] for x in range(8) for y in range(8) if current_board.tiles[y][x] == player
-    )
-    
-    adversary_position_value = sum(
-        EVAL_TEMPLATE[x][y] for x in range(8) for y in range(8) if current_board.tiles[y][x] == adversary
-    )
-    
-    position_diff = player_position_value - adversary_position_value
-    total_count = player_count + adversary_count
+    piece_diff = player_pieces - opponent_pieces
 
-    if total_count < 20:
-        score = (
-            8 * mobility_diff +
-            25 * corner_diff +
-            2 * edge_diff +
-            10 * position_diff
-        )
-    elif total_count < 44:
-        score = (
-            7 * mobility_diff +
-            40 * corner_diff +
-            3 * edge_diff +
-            20 * position_diff +
-            3 * piece_diff
-        )
+    corners = [(0,0), (0,7), (7,0), (7,7)]
+    player_corners = sum(1 for x, y in corners if board.tiles[y][x] == player)
+    opponent_corners = sum(1 for x, y in corners if board.tiles[y][x] == opponent)
+    corner_diff = player_corners - opponent_corners
+
+    edges = [(x, y) for x in range(8) for y in range(8) if x in {0,7} or y in {0,7}]
+    player_edges = sum(1 for x, y in edges if board.tiles[y][x] == player)
+    opponent_edges = sum(1 for x, y in edges if board.tiles[y][x] == opponent)
+    edge_diff = player_edges - opponent_edges
+
+    player_moves = len(state.legal_moves())
+    opponent_moves = len(state.board._legal_moves.get(opponent, set()))
+    if player_moves + opponent_moves > 0:
+        mobility = 100 * (player_moves - opponent_moves) / (player_moves + opponent_moves)
     else:
-        score = (
-            20 * piece_diff +
-            50 * corner_diff +
-            5 * edge_diff +
-            10 * position_diff
-        )
+        mobility = 0
 
-    return score
+    player_positional = sum(
+        EVAL_TEMPLATE[y][x] for x in range(8) for y in range(8) if board.tiles[y][x] == player
+    )
+    opponent_positional = sum(
+        EVAL_TEMPLATE[y][x] for x in range(8) for y in range(8) if board.tiles[y][x] == opponent
+    )
+    positional_diff = player_positional - opponent_positional
+
+    danger_positions = [(0,1), (1,0), (1,1), (0,6), (1,6), (1,7),
+                        (6,0), (6,1), (7,1), (6,6), (6,7), (7,6)]
+    player_danger = sum(1 for x, y in danger_positions if board.tiles[y][x] == player)
+    opponent_danger = sum(1 for x, y in danger_positions if board.tiles[y][x] == opponent)
+    danger_penalty = player_danger - opponent_danger
+
+    def is_stable(x, y):
+        return (x == 0 or x == 7) and (y == 0 or y == 7)
+
+    player_stable = sum(1 for x, y in corners if board.tiles[y][x] == player)
+    opponent_stable = sum(1 for x, y in corners if board.tiles[y][x] == opponent)
+    stability = player_stable - opponent_stable
+
+    early_score = (
+        10 * mobility +
+        25 * corner_diff +
+        5 * edge_diff +
+        10 * positional_diff -
+        20 * danger_penalty
+    )
+    late_score = (
+        40 * piece_diff +
+        50 * corner_diff +
+        5 * edge_diff +
+        15 * positional_diff +
+        30 * stability
+    )
+
+    score = (1 - phase) * early_score + phase * late_score
+
+    return float(score)
