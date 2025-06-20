@@ -20,10 +20,14 @@ def maximize_score(state, player, max_depth: int, eval_func: Callable, depth: in
     if state.is_terminal() or depth == max_depth:
         return eval_func(state, player), None
 
+    legal_moves = state.legal_moves()
+    if not legal_moves:
+        return eval_func(state, player), None
+
     highest_score = float('-inf')
     best_move = None
 
-    for action in state.legal_moves():
+    for action in legal_moves:
         resulting_state = state.next_state(action)
         evaluated_score, _ = minimize_score(resulting_state, player, max_depth, eval_func, depth + 1, alpha, beta)
 
@@ -42,10 +46,14 @@ def minimize_score(state, player, max_depth: int, eval_func: Callable, depth: in
     if state.is_terminal() or depth == max_depth:
         return eval_func(state, player), None
 
+    legal_moves = state.legal_moves()
+    if not legal_moves:
+        return eval_func(state, player), None
+
     lowest_score = float('inf')
     best_move = None
 
-    for action in state.legal_moves():
+    for action in legal_moves:
         resulting_state = state.next_state(action)
         evaluated_score, _ = maximize_score(resulting_state, player, max_depth, eval_func, depth + 1, alpha, beta)
 
