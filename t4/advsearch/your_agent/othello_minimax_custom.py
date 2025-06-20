@@ -46,61 +46,53 @@ def evaluate_custom(state, player:str) -> float:
             return 0
 
     current_board = state.get_board()
-
     player_count = current_board.num_pieces(player)
     adversary_count = current_board.num_pieces(adversary)
-
-    piece_difference = player_count - adversary_count
-
+    piece_diff = player_count - adversary_count
     corner_coords = [(0, 0), (0, 7), (7, 0), (7, 7)]
     player_corner_count = sum(1 for cx, cy in corner_coords if current_board.tiles[cy][cx] == player)
     adversary_corner_count = sum(1 for cx, cy in corner_coords if current_board.tiles[cy][cx] == adversary)
-
-    corner_difference = player_corner_count - adversary_corner_count
-
+    corner_diff = player_corner_count - adversary_corner_count
     edge_coords = [(x, y) for x in range(8) for y in range(8) if x in [0, 7] or y in [0, 7]]
     player_edge_count = sum(1 for ex, ey in edge_coords if current_board.tiles[ey][ex] == player)
-    adversary_edge_count = sum(1 for ex, ey in edge_coords if current_board.tiles[ey][ex] == adversary)
-
-    edge_difference = player_edge_count - adversary_edge_count
-
+    adversary_edge_count = sum(1 for ex, ey in edge_coords if current_board.tiles[ey][ex] == adversary)  
+    edge_diff = player_edge_count - adversary_edge_count
     player_move_options = len(state.legal_moves())
-    adversary_move_options = len(GameState(current_board, adversary).legal_moves())
-
-    mobility_difference = player_move_options - adversary_move_options
+    adversary_move_options = len(GameState(current_board, adversary).legal_moves())   
+    mobility_diff = player_move_options - adversary_move_options
 
     player_position_value = sum(
         EVAL_TEMPLATE[x][y] for x in range(8) for y in range(8) if current_board.tiles[y][x] == player
     )
+    
     adversary_position_value = sum(
         EVAL_TEMPLATE[x][y] for x in range(8) for y in range(8) if current_board.tiles[y][x] == adversary
     )
-
-    position_difference = player_position_value - adversary_position_value
-
+    
+    position_diff = player_position_value - adversary_position_value
     total_count = player_count + adversary_count
 
     if total_count < 20:
         score = (
-            8 * mobility_difference +
-            25 * corner_difference +
-            2 * edge_difference +
-            10 * position_difference
+            8 * mobility_diff +
+            25 * corner_diff +
+            2 * edge_diff +
+            10 * position_diff
         )
     elif total_count < 44:
         score = (
-            7 * mobility_difference +
-            40 * corner_difference +
-            3 * edge_difference +
-            20 * position_difference +
-            3 * piece_difference
+            7 * mobility_diff +
+            40 * corner_diff +
+            3 * edge_diff +
+            20 * position_diff +
+            3 * piece_diff
         )
     else:
         score = (
-            20 * piece_difference +
-            50 * corner_difference +
-            5 * edge_difference +
-            10 * position_difference
+            20 * piece_diff +
+            50 * corner_diff +
+            5 * edge_diff +
+            10 * position_diff
         )
 
     return score
