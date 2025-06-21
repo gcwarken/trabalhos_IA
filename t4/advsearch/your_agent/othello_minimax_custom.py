@@ -34,7 +34,7 @@ def make_move(state) -> Tuple[int, int]:
     # Remova-o e coloque uma chamada para o minimax_move (que vc implementara' no modulo minimax).
     # A chamada a minimax_move deve receber sua funcao evaluate como parametro.
 
-    move = minimax_move(state, 5, evaluate_custom)
+    move = minimax_move(state, 4, evaluate_custom)
     
     if move is None:
         legal = state.legal_moves()
