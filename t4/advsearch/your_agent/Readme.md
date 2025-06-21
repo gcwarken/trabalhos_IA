@@ -30,7 +30,7 @@ Esta heurística define um agente que utiliza o algoritmo minimax com profundida
 
 - Heurística Customizada:
 
-Este heurística define um agente que utiliza o algoritmo Minimax com profundidade 5 e uma heurística personalizada para avaliar os estados do jogo. A função evaluate_custom calcula uma pontuação combinando diversos fatores estratégicos: diferença de peças, controle dos cantos e bordas, mobilidade (número de jogadas possíveis), posicionamento com base em uma matriz de pesos (EVAL_TEMPLATE), penalidades por peças em posições perigosas, e estabilidade baseada no domínio dos cantos. A avaliação pondera essas características de forma dinâmica, ajustando sua importância conforme o progresso do jogo (fase inicial ou final). A função make_move usa essa heurística com o minimax para escolher a melhor jogada e inclui um fallback para selecionar um movimento aleatório caso nenhuma jogada seja retornada, evitando inatividade em situações críticas.
+Este heurística define um agente que utiliza o algoritmo Minimax com profundidade 4 e uma heurística personalizada para avaliar os estados do jogo. A função evaluate_custom calcula uma pontuação combinando diversos fatores estratégicos: diferença de peças, controle dos cantos e bordas, mobilidade (número de jogadas possíveis), posicionamento com base em uma matriz de pesos (EVAL_TEMPLATE), penalidades por peças em posições perigosas, e estabilidade baseada no domínio dos cantos. A avaliação pondera essas características de forma dinâmica, ajustando sua importância conforme o progresso do jogo (fase inicial ou final). A função make_move usa essa heurística com o minimax para escolher a melhor jogada e inclui um fallback para selecionar um movimento aleatório caso nenhuma jogada seja retornada, evitando inatividade em situações críticas.
 
 - Critérios de Parada: 
 
@@ -39,10 +39,10 @@ Todas as 3 Heurísticas tem como critério de parada quando o estado atual do jo
 Partidas:
 - Contagem de peças X Valor posicional: 37x27
 - Valor posicional X Contagem de peças: 26x38
-- Contagem de peças X Heurística customizada: 20x44
-- Heurística customizada X Contagem de peças: 34x30
-- Valor posicional X Heurística customizada: 34x30
-- Heurística customizada X Valor posicional: 49x15
+- Contagem de peças X Heurística customizada: 31x33
+- Heurística customizada X Contagem de peças: 44x20
+- Valor posicional X Heurística customizada: 41x21
+- Heurística customizada X Valor posicional: 33x31
 
 
 Heurística Selecionada para o Torneio: Heurística Customizada
